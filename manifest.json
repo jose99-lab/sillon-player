@@ -1,31 +1,22 @@
 {
-  "name": "Sillon — lecteur de musique",
+  "name": "Sillon Player",
   "short_name": "Sillon",
-  "description": "Lecteur de musique hors-ligne avec bibliothèque locale.",
-  "start_url": "./index.html",
-  "scope": "./",
+  "description": "Lecteur de musique moderne",
+  "start_url": "./",
   "display": "standalone",
+  "background_color": "#080b1c",
+  "theme_color": "#080b1c",
   "orientation": "portrait",
-  "background_color": "#14110F",
-  "theme_color": "#14110F",
   "icons": [
     {
-      "src": "icon-192.png",
+      "src": "icons/icon-192.png",
       "sizes": "192x192",
-      "type": "image/png",
-      "purpose": "any"
+      "type": "image/png"
     },
     {
-      "src": "icon-512.png",
+      "src": "icons/icon-512.png",
       "sizes": "512x512",
-      "type": "image/png",
-      "purpose": "any"
-    },
-    {
-      "src": "icon-maskable-512.png",
-      "sizes": "512x512",
-      "type": "image/png",
-      "purpose": "maskable"
+      "type": "image/png"
     }
   ]
 }
