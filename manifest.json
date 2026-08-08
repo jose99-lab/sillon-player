@@ -4,7 +4,7 @@
   "description": "Lecteur de musique moderne",
   "start_url": "./",
   "display": "standalone",
-  "background_color": "#080b1c",
+  "background_color": "grey",
   "theme_color": "#080b1c",
   "orientation": "portrait",
   "icons": [
