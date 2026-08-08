@@ -2,277 +2,617 @@
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <meta name="viewport"
-          content="width=device-width, initial-scale=1.0">
-
-    <meta name="theme-color" content="#080b1c">
-
-    <meta name="description"
-          content="Sillon Player - Lecteur de musique moderne">
-
-    <title>Sillon Player</title>
-
+    <meta name="theme-color" content="#111827">
     <link rel="manifest" href="manifest.json">
+
+    <title>RJ Player</title>
 
     <style>
         * {
+            box-sizing: border-box;
             margin: 0;
             padding: 0;
-            box-sizing: border-box;
         }
 
         body {
             font-family: Arial, sans-serif;
-            background: #080b1c;
+            background: #111827;
             color: white;
             min-height: 100vh;
+            display: flex;
+            justify-content: center;
         }
 
-        .app {
-            max-width: 500px;
-            margin: auto;
+        .player {
+            width: 100%;
+            max-width: 480px;
             min-height: 100vh;
             padding: 25px 20px;
-        }
-
-        header {
             display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 30px;
+            flex-direction: column;
         }
 
-        .logo {
-            font-size: 22px;
-            font-weight: bold;
-        }
-
-        .logo span {
-            color: #b14cff;
-        }
-
-        .menu {
-            font-size: 25px;
-        }
-
-        .album {
-            width: 100%;
-            aspect-ratio: 1;
-            border-radius: 25px;
-            background: linear-gradient(
-                135deg,
-                #651fff,
-                #ff2bd6
-            );
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            box-shadow: 0 20px 50px rgba(128, 50, 255, .35);
-            margin-bottom: 30px;
-        }
-
-        .album-icon {
-            font-size: 100px;
-        }
-
-        .song-info {
+        .header {
+            text-align: center;
             margin-bottom: 25px;
         }
 
-        .song-title {
+        .header h1 {
             font-size: 28px;
+        }
+
+        .header p {
+            color: #9ca3af;
+            margin-top: 5px;
+        }
+
+        .cover {
+            width: 280px;
+            height: 280px;
+            margin: 10px auto 25px;
+            border-radius: 25px;
+            background: linear-gradient(135deg, #2563eb, #7c3aed);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 80px;
+            box-shadow: 0 20px 50px rgba(0,0,0,.4);
+        }
+
+        .song-info {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .song-title {
+            font-size: 22px;
             font-weight: bold;
-            margin-bottom: 8px;
+            overflow: hidden;
+            white-space: nowrap;
+            text-overflow: ellipsis;
         }
 
         .artist {
-            color: #999;
-            font-size: 16px;
+            color: #9ca3af;
+            margin-top: 6px;
         }
 
         .progress-container {
-            margin: 25px 0;
+            margin-top: 10px;
         }
 
-        .progress {
+        input[type="range"] {
             width: 100%;
-            height: 5px;
-            background: #292d45;
-            border-radius: 10px;
-            overflow: hidden;
-        }
-
-        .progress-bar {
-            width: 35%;
-            height: 100%;
-            background: linear-gradient(
-                90deg,
-                #ff3bd4,
-                #704cff
-            );
+            accent-color: #6366f1;
+            cursor: pointer;
         }
 
         .time {
             display: flex;
             justify-content: space-between;
-            color: #777;
+            color: #9ca3af;
             font-size: 12px;
-            margin-top: 8px;
+            margin-top: 5px;
         }
 
         .controls {
             display: flex;
             justify-content: center;
             align-items: center;
-            gap: 30px;
-            margin: 30px 0;
+            gap: 25px;
+            margin: 25px 0;
         }
 
-        .control {
+        button {
             border: none;
-            background: transparent;
-            color: white;
-            font-size: 25px;
             cursor: pointer;
+            color: white;
+            background: transparent;
         }
 
-        .play {
+        .control-btn {
+            font-size: 28px;
+        }
+
+        .play-btn {
             width: 70px;
             height: 70px;
             border-radius: 50%;
-            border: none;
-            color: white;
-            font-size: 28px;
-            background: linear-gradient(
-                135deg,
-                #b13cff,
-                #4b5cff
-            );
-            box-shadow: 0 10px 30px rgba(105, 60, 255, .5);
-            cursor: pointer;
-        }
-
-        .bottom {
+            background: #6366f1;
+            font-size: 30px;
             display: flex;
-            justify-content: space-between;
-            margin-top: 25px;
-        }
-
-        .bottom button {
-            background: #12162b;
-            border: 1px solid #252a45;
-            color: #aaa;
-            padding: 14px;
-            border-radius: 15px;
-            cursor: pointer;
+            align-items: center;
+            justify-content: center;
         }
 
         .volume {
-            margin-top: 25px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 25px;
         }
 
-        .volume input {
+        .volume span {
+            font-size: 22px;
+        }
+
+        .file-section {
+            margin-top: auto;
+        }
+
+        .file-btn {
             width: 100%;
+            padding: 15px;
+            border-radius: 12px;
+            background: #1f2937;
+            color: white;
+            font-size: 16px;
+            border: 1px solid #374151;
+        }
+
+        .playlist {
+            margin-top: 20px;
+        }
+
+        .playlist h2 {
+            font-size: 18px;
+            margin-bottom: 10px;
+        }
+
+        .song {
+            padding: 12px;
+            background: #1f2937;
+            margin-bottom: 8px;
+            border-radius: 10px;
+            cursor: pointer;
+            overflow: hidden;
+            white-space: nowrap;
+            text-overflow: ellipsis;
+        }
+
+        .song.active {
+            background: #3730a3;
+        }
+
+        #fileInput {
+            display: none;
         }
     </style>
 </head>
 
 <body>
 
-<div class="app">
+<div class="player">
 
-    <header>
-        <div class="logo">
-            Sillon<span>Player</span>
+    <div class="header">
+        <h1>🎵 RJ Player</h1>
+        <p>Music Player</p>
+    </div>
+
+    <div class="cover">
+        🎵
+    </div>
+
+    <div class="song-info">
+        <div class="song-title" id="songTitle">
+            Aucune chanson
         </div>
 
-        <div class="menu">⋮</div>
-    </header>
+        <div class="artist" id="artist">
+            Sélectionnez vos musiques
+        </div>
+    </div>
 
-    <main>
+    <div class="progress-container">
 
-        <div class="album">
-            <div class="album-icon">🎵</div>
+        <input
+            type="range"
+            id="progress"
+            min="0"
+            max="100"
+            value="0"
+        >
+
+        <div class="time">
+            <span id="currentTime">0:00</span>
+            <span id="duration">0:00</span>
         </div>
 
-        <div class="song-info">
-            <div class="song-title">
-                Ma chanson
-            </div>
+    </div>
 
-            <div class="artist">
-                Artiste inconnu
-            </div>
+    <div class="controls">
+
+        <button
+            class="control-btn"
+            id="prevBtn"
+            title="Précédent">
+            ⏮
+        </button>
+
+        <button
+            class="play-btn"
+            id="playBtn"
+            title="Play">
+            ▶
+        </button>
+
+        <button
+            class="control-btn"
+            id="nextBtn"
+            title="Suivant">
+            ⏭
+        </button>
+
+    </div>
+
+    <div class="volume">
+
+        <span>🔊</span>
+
+        <input
+            type="range"
+            id="volume"
+            min="0"
+            max="1"
+            step="0.01"
+            value="1"
+        >
+
+    </div>
+
+    <audio id="audio"></audio>
+
+    <div class="file-section">
+
+        <input
+            type="file"
+            id="fileInput"
+            accept="audio/*"
+            multiple
+        >
+
+        <button
+            class="file-btn"
+            id="chooseBtn">
+            📂 Ajouter mes musiques
+        </button>
+
+        <div class="playlist">
+
+            <h2>Playlist</h2>
+
+            <div id="playlist"></div>
+
         </div>
 
-        <div class="progress-container">
-
-            <div class="progress">
-                <div class="progress-bar"></div>
-            </div>
-
-            <div class="time">
-                <span>01:24</span>
-                <span>03:35</span>
-            </div>
-
-        </div>
-
-        <div class="controls">
-
-            <button class="control">
-                🔀
-            </button>
-
-            <button class="control">
-                ⏮
-            </button>
-
-            <button class="play">
-                ▶
-            </button>
-
-            <button class="control">
-                ⏭
-            </button>
-
-            <button class="control">
-                🔁
-            </button>
-
-        </div>
-
-        <div class="volume">
-            🔊
-            <input
-                type="range"
-                min="0"
-                max="100"
-                value="70">
-        </div>
-
-        <div class="bottom">
-            <button>♡ Favoris</button>
-            <button>☷ Playlist</button>
-            <button>☰ Musiques</button>
-        </div>
-
-    </main>
+    </div>
 
 </div>
 
 <script>
-    // Service Worker
-    if ("serviceWorker" in navigator) {
-        navigator.serviceWorker.register("sw.js")
+
+const audio = document.getElementById("audio");
+
+const playBtn = document.getElementById("playBtn");
+const prevBtn = document.getElementById("prevBtn");
+const nextBtn = document.getElementById("nextBtn");
+
+const progress = document.getElementById("progress");
+const volume = document.getElementById("volume");
+
+const currentTime = document.getElementById("currentTime");
+const duration = document.getElementById("duration");
+
+const songTitle = document.getElementById("songTitle");
+const artist = document.getElementById("artist");
+
+const fileInput = document.getElementById("fileInput");
+const chooseBtn = document.getElementById("chooseBtn");
+
+const playlistElement = document.getElementById("playlist");
+
+
+let songs = [];
+let currentIndex = 0;
+
+
+// -----------------------------
+// OUVRIR LES FICHIERS
+// -----------------------------
+
+chooseBtn.addEventListener("click", () => {
+    fileInput.click();
+});
+
+
+fileInput.addEventListener("change", (event) => {
+
+    const files = Array.from(event.target.files);
+
+    if (files.length === 0) return;
+
+    songs = files;
+
+    currentIndex = 0;
+
+    displayPlaylist();
+
+    loadSong(currentIndex);
+
+});
+
+
+// -----------------------------
+// CHARGER UNE CHANSON
+// -----------------------------
+
+function loadSong(index) {
+
+    if (!songs.length) return;
+
+    const file = songs[index];
+
+    const url = URL.createObjectURL(file);
+
+    audio.src = url;
+
+    songTitle.textContent = file.name;
+
+    artist.textContent = "Fichier local";
+
+    progress.value = 0;
+
+    currentTime.textContent = "0:00";
+
+    updatePlaylist();
+
+}
+
+
+// -----------------------------
+// PLAY / PAUSE
+// -----------------------------
+
+playBtn.addEventListener("click", () => {
+
+    if (!audio.src) return;
+
+    if (audio.paused) {
+
+        audio.play();
+
+        playBtn.textContent = "⏸";
+
+    } else {
+
+        audio.pause();
+
+        playBtn.textContent = "▶";
+
+    }
+
+});
+
+
+// -----------------------------
+// PREVIOUS
+// -----------------------------
+
+prevBtn.addEventListener("click", () => {
+
+    if (!songs.length) return;
+
+    currentIndex--;
+
+    if (currentIndex < 0) {
+        currentIndex = songs.length - 1;
+    }
+
+    loadSong(currentIndex);
+
+    audio.play();
+
+    playBtn.textContent = "⏸";
+
+});
+
+
+// -----------------------------
+// NEXT
+// -----------------------------
+
+nextBtn.addEventListener("click", () => {
+
+    nextSong();
+
+});
+
+
+function nextSong() {
+
+    if (!songs.length) return;
+
+    currentIndex++;
+
+    if (currentIndex >= songs.length) {
+        currentIndex = 0;
+    }
+
+    loadSong(currentIndex);
+
+    audio.play();
+
+    playBtn.textContent = "⏸";
+
+}
+
+
+// -----------------------------
+// CHANSON TERMINÉE
+// -----------------------------
+
+audio.addEventListener("ended", () => {
+
+    nextSong();
+
+});
+
+
+// -----------------------------
+// PROGRESS BAR
+// -----------------------------
+
+audio.addEventListener("loadedmetadata", () => {
+
+    duration.textContent =
+        formatTime(audio.duration);
+
+});
+
+
+audio.addEventListener("timeupdate", () => {
+
+    if (!audio.duration) return;
+
+    const percentage =
+        (audio.currentTime / audio.duration) * 100;
+
+    progress.value = percentage;
+
+    currentTime.textContent =
+        formatTime(audio.currentTime);
+
+});
+
+
+progress.addEventListener("input", () => {
+
+    if (!audio.duration) return;
+
+    audio.currentTime =
+        (progress.value / 100) * audio.duration;
+
+});
+
+
+// -----------------------------
+// VOLUME
+// -----------------------------
+
+volume.addEventListener("input", () => {
+
+    audio.volume = volume.value;
+
+});
+
+
+// -----------------------------
+// FORMAT TEMPS
+// -----------------------------
+
+function formatTime(seconds) {
+
+    if (isNaN(seconds)) return "0:00";
+
+    const minutes =
+        Math.floor(seconds / 60);
+
+    const secs =
+        Math.floor(seconds % 60);
+
+    return minutes + ":" +
+        (secs < 10 ? "0" : "") +
+        secs;
+
+}
+
+
+// -----------------------------
+// PLAYLIST
+// -----------------------------
+
+function displayPlaylist() {
+
+    playlistElement.innerHTML = "";
+
+    songs.forEach((song, index) => {
+
+        const div =
+            document.createElement("div");
+
+        div.className = "song";
+
+        div.textContent = song.name;
+
+        div.addEventListener("click", () => {
+
+            currentIndex = index;
+
+            loadSong(currentIndex);
+
+            audio.play();
+
+            playBtn.textContent = "⏸";
+
+        });
+
+        playlistElement.appendChild(div);
+
+    });
+
+    updatePlaylist();
+
+}
+
+
+function updatePlaylist() {
+
+    const items =
+        playlistElement.querySelectorAll(".song");
+
+    items.forEach((item, index) => {
+
+        if (index === currentIndex) {
+
+            item.classList.add("active");
+
+        } else {
+
+            item.classList.remove("active");
+
+        }
+
+    });
+
+}
+
+
+// -----------------------------
+// SERVICE WORKER
+// -----------------------------
+
+if ("serviceWorker" in navigator) {
+
+    window.addEventListener("load", () => {
+
+        navigator.serviceWorker
+            .register("sw.js")
             .then(() => {
                 console.log("Service Worker activé");
             })
             .catch(error => {
-                console.log("Erreur :", error);
+                console.log(
+                    "Erreur Service Worker:",
+                    error
+                );
             });
-    }
+
+    });
+
+}
+
 </script>
 
 </body>
